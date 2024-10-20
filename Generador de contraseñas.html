@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Contraseñas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Selector de idioma y botón de modo oscuro -->
+        <div class="top-bar">
+            <div class="language-selector">
+                <select id="languageSelect" onchange="cambiarIdioma()">
+                    <option value="es" selected>Español</option>
+                    <option value="en">English</option>
+                    <option value="it">Italiano</option>
+                    <option value="pt">Português</option>
+                </select>
+            </div>
+            <button id="darkModeToggle" onclick="toggleDarkMode()">Modo Oscuro</button>
+        </div>
+
+        <h1 id="titulo">Generador de Contraseñas</h1>
+        <form id="passwordForm">
+            <label for="numMayus" id="labelMayus">Número de mayúsculas:</label>
+            <input type="number" id="numMayus" min="0" value="3"><br>
+
+            <label for="numMinus" id="labelMinus">Número de minúsculas:</label>
+            <input type="number" id="numMinus" min="0" value="3"><br>
+
+            <label for="numNum" id="labelNum">Número de números:</label>
+            <input type="number" id="numNum" min="0" value="3"><br>
+
+            <label for="numSymbols" id="labelSymbols">Número de símbolos:</label>
+            <input type="number" id="numSymbols" min="0" value="3"><br>
+
+            <button type="button" onclick="generarContrasena()" id="generarBtn">Generar Contraseña</button>
+        </form>
+        <h2 id="contrasenaGenerada"></h2>
+    </div>
+    <script>
+        function cambiarIdioma() {
+            var idioma = document.getElementById("languageSelect").value;
+            var textos = {
+                es: {
+                    titulo: "Generador de Contraseñas",
+                    labelMayus: "Número de mayúsculas:",
+                    labelMinus: "Número de minúsculas:",
+                    labelNum: "Número de números:",
+                    labelSymbols: "Número de símbolos:",
+                    generarBtn: "Generar Contraseña"
+                },
+                en: {
+                    titulo: "Password Generator",
+                    labelMayus: "Number of uppercase letters:",
+                    labelMinus: "Number of lowercase letters:",
+                    labelNum: "Number of numbers:",
+                    labelSymbols: "Number of symbols:",
+                    generarBtn: "Generate Password"
+                },
+                it: {
+                    titulo: "Generatore di Password",
+                    labelMayus: "Numero di lettere maiuscole:",
+                    labelMinus: "Numero di lettere minuscole:",
+                    labelNum: "Numero di numeri:",
+                    labelSymbols: "Numero di simboli:",
+                    generarBtn: "Genera Password"
+                },
+                pt: {
+                    titulo: "Gerador de Senhas",
+                    labelMayus: "Número de letras maiúsculas:",
+                    labelMinus: "Número de letras minúsculas:",
+                    labelNum: "Número de números:",
+                    labelSymbols: "Número de símbolos:",
+                    generarBtn: "Gerar Senha"
+                }
+            };
+
+            document.getElementById("titulo").innerText = textos[idioma].titulo;
+            document.getElementById("labelMayus").innerText = textos[idioma].labelMayus;
+            document.getElementById("labelMinus").innerText = textos[idioma].labelMinus;
+            document.getElementById("labelNum").innerText = textos[idioma].labelNum;
+            document.getElementById("labelSymbols").innerText = textos[idioma].labelSymbols;
+            document.getElementById("generarBtn").innerText = textos[idioma].generarBtn;
+        }
+
+        function generarContrasena() {
+            var numMayus = parseInt(document.getElementById("numMayus").value);
+            var numMinus = parseInt(document.getElementById("numMinus").value);
+            var numNum = parseInt(document.getElementById("numNum").value);
+            var numSymbols = parseInt(document.getElementById("numSymbols").value);
+
+            var mayusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var minusculas = "abcdefghijklmnopqrstuvwxyz";
+            var numeros = "0123456789";
+            var simbolos = "!@#$%^&*()_-+=[]{}|;:,.<>?";
+
+            var contrasenaArray = [];
+
+            contrasenaArray = contrasenaArray.concat(generarCaracteres(numMayus, mayusculas));
+            contrasenaArray = contrasenaArray.concat(generarCaracteres(numMinus, minusculas));
+            contrasenaArray = contrasenaArray.concat(generarCaracteres(numNum, numeros));
+            contrasenaArray = contrasenaArray.concat(generarCaracteres(numSymbols, simbolos));
+
+            contrasenaArray.sort(() => Math.random() - 0.5);
+
+            var contrasenaGenerada = contrasenaArray.join("");
+            var idioma = document.getElementById("languageSelect").value;
+            var mensaje = {
+                es: "Contraseña generada: ",
+                en: "Generated password: ",
+                it: "Password generata: ",
+                pt: "Senha gerada: "
+            };
+            document.getElementById("contrasenaGenerada").innerText = mensaje[idioma] + contrasenaGenerada;
+        }
+
+        function generarCaracteres(cantidad, caracteres) {
+            var resultado = [];
+            for (var i = 0; i < cantidad; i++) {
+                var randomIndex = Math.floor(Math.random() * caracteres.length);
+                resultado.push(caracteres[randomIndex]);
+            }
+            return resultado;
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
+</body>
+</html>
